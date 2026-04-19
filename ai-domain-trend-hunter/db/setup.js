@@ -37,12 +37,31 @@ function initSchema(db) {
       reasoning TEXT,
       theme TEXT,
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      available INTEGER,
+      availability_error TEXT,
+      availability_checked_at TEXT,
       UNIQUE(article_id, domain)
     );
 
     CREATE INDEX IF NOT EXISTS idx_domains_score ON domains(brandability_score DESC);
     CREATE INDEX IF NOT EXISTS idx_domains_theme ON domains(theme);
   `);
+
+  const existing = new Set(
+    db.prepare(`PRAGMA table_info(domains)`).all().map((c) => c.name),
+  );
+  const migrations = [
+    ['available', 'INTEGER'],
+    ['availability_error', 'TEXT'],
+    ['availability_checked_at', 'TEXT'],
+  ];
+  for (const [col, type] of migrations) {
+    if (!existing.has(col)) {
+      db.exec(`ALTER TABLE domains ADD COLUMN ${col} ${type}`);
+    }
+  }
+
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_domains_available ON domains(available)`);
 }
 
 if (require.main === module) {
