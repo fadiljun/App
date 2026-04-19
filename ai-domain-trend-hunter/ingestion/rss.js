@@ -7,7 +7,14 @@ const FEEDS = [
   { name: 'hackernews', url: 'https://news.ycombinator.com/rss' },
 ];
 
-const parser = new Parser({ timeout: 15000 });
+const parser = new Parser({
+  timeout: 15000,
+  headers: {
+    'User-Agent':
+      'Mozilla/5.0 (compatible; AI-Domain-Trend-Hunter/1.0; +https://example.com/bot)',
+    Accept: 'application/rss+xml, application/atom+xml, application/xml, text/xml',
+  },
+});
 
 async function fetchFeed(feed) {
   const parsed = await parser.parseURL(feed.url);
