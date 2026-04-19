@@ -1,0 +1,20 @@
+{
+  "name": "ai-domain-trend-hunter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.90.0",
+    "axios": "^1.15.0",
+    "better-sqlite3": "^12.9.0",
+    "dotenv": "^17.4.2",
+    "node-cron": "^4.2.1",
+    "rss-parser": "^3.13.0"
+  }
+}
