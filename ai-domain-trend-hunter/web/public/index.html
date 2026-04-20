@@ -131,7 +131,21 @@
       </header>
 
       <!-- Stats -->
-      <section id="stats" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8"></section>
+      <section id="stats" class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8"></section>
+
+      <!-- Approval queue -->
+      <section id="queue-section" class="mb-10 hidden">
+        <div class="flex items-end justify-between mb-4">
+          <div>
+            <h2 class="text-xl font-bold flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              Approval queue
+            </h2>
+            <p class="text-sm text-zinc-500 mt-1" id="queue-sub"></p>
+          </div>
+        </div>
+        <div id="queue" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+      </section>
 
       <!-- Controls -->
       <section class="card rounded-2xl p-4 sm:p-5 mb-8">
@@ -197,12 +211,19 @@
       const $ = (s) => document.querySelector(s);
       const $$ = (s) => document.querySelectorAll(s);
 
-      function availBadge(available) {
-        if (available === 1)
+      function availBadge(d) {
+        if (d.purchased_at)
+          return '<span class="chip bg-amber-500/15 text-amber-300 border border-amber-500/30"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>Owned</span>';
+        if (d.available === 1)
           return '<span class="chip bg-emerald-500/15 text-emerald-300 border border-emerald-500/30"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Available</span>';
-        if (available === 0)
+        if (d.available === 0)
           return '<span class="chip bg-rose-500/10 text-rose-300 border border-rose-500/20"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>Taken</span>';
         return '<span class="chip bg-zinc-500/10 text-zinc-400 border border-zinc-500/20"><span class="w-1.5 h-1.5 rounded-full bg-zinc-500"></span>Unchecked</span>';
+      }
+
+      function fmtPrice(v) {
+        if (v == null) return null;
+        return '$' + Number(v).toFixed(2);
       }
 
       function scoreRow(label, value) {
@@ -221,6 +242,7 @@
           { label: 'Available', value: s.available_count ?? 0, accent: 'from-emerald-500/20 to-emerald-500/5' },
           { label: 'Taken', value: s.taken_count ?? 0, accent: 'from-rose-500/15 to-rose-500/5' },
           { label: 'Themes', value: s.theme_count ?? 0, accent: 'from-cyan-500/20 to-cyan-500/5' },
+          { label: 'Purchased', value: s.purchased_count ?? 0, accent: 'from-amber-500/20 to-amber-500/5' },
         ];
         $('#stats').innerHTML = tiles
           .map(
@@ -288,11 +310,13 @@
                   <div class="mono text-xl font-semibold truncate">${d.domain}</div>
                   <div class="text-xs text-zinc-500 mt-0.5 uppercase tracking-wider">.${d.tld}</div>
                 </div>
-                ${availBadge(d.available)}
+                ${availBadge(d)}
               </div>
               <div class="flex items-center gap-2 flex-wrap">
                 <span class="chip bg-violet-500/10 text-violet-300 border border-violet-500/20">${d.theme || 'Untagged'}</span>
                 <span class="chip bg-white/5 text-zinc-300 border border-white/10">Total ${total}/30</span>
+                ${d.price_usd != null ? `<span class="chip bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">${fmtPrice(d.price_usd)}</span>` : ''}
+                ${d.is_premium ? '<span class="chip bg-amber-500/10 text-amber-300 border border-amber-500/20">Premium</span>' : ''}
               </div>
               <div class="space-y-1.5">
                 ${scoreRow('Brand', d.brand)}
@@ -314,11 +338,79 @@
           .join('');
       }
 
-      async function load() {
-        const res = await fetch('/api/domains');
+      async function loadQueue() {
+        const res = await fetch('/api/approval-queue');
         const data = await res.json();
-        state.domains = data.domains;
-        state.stats = data.stats;
+        const section = $('#queue-section');
+        const container = $('#queue');
+        const sub = $('#queue-sub');
+        if (!data.queue || data.queue.length === 0) {
+          section.classList.add('hidden');
+          container.innerHTML = '';
+          return;
+        }
+        section.classList.remove('hidden');
+        sub.textContent =
+          data.queue.length +
+          ' domain' +
+          (data.queue.length === 1 ? '' : 's') +
+          ' match your buy threshold — click to purchase on Porkbun, then mark as bought.';
+        container.innerHTML = data.queue
+          .map((d) => {
+            const total = d.brand + d.memo + d.relevance;
+            return `
+            <div class="card rounded-2xl p-5 flex items-center justify-between gap-4 border-emerald-500/20">
+              <div class="min-w-0 flex-1">
+                <div class="mono text-lg font-semibold truncate">${d.domain}</div>
+                <div class="text-xs text-zinc-500 mt-0.5">${d.theme || ''}</div>
+                <div class="flex gap-2 mt-2 flex-wrap">
+                  <span class="chip bg-white/5 text-zinc-300 border border-white/10">${total}/30</span>
+                  ${d.price_usd != null ? `<span class="chip bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">${fmtPrice(d.price_usd)}</span>` : ''}
+                </div>
+              </div>
+              <div class="flex flex-col gap-2 shrink-0">
+                <a href="${d.buy_url}" target="_blank" rel="noreferrer noopener"
+                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 text-xs font-medium">
+                  Buy on Porkbun →
+                </a>
+                <button data-mark="${d.id}"
+                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 text-zinc-300 border border-white/10 hover:bg-white/10 text-xs font-medium">
+                  Mark purchased
+                </button>
+              </div>
+            </div>`;
+          })
+          .join('');
+        container.querySelectorAll('[data-mark]').forEach((btn) => {
+          btn.addEventListener('click', () => markPurchased(Number(btn.dataset.mark), btn));
+        });
+      }
+
+      async function markPurchased(id, btn) {
+        btn.textContent = 'Saving…';
+        btn.disabled = true;
+        try {
+          const res = await fetch('/api/mark-purchased/' + id, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({}),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'failed');
+          await load();
+        } catch (err) {
+          btn.textContent = 'Error: ' + err.message;
+          btn.disabled = false;
+        }
+      }
+
+      async function load() {
+        const [domainsRes, queueRes] = await Promise.all([
+          fetch('/api/domains').then((r) => r.json()),
+          loadQueue(),
+        ]);
+        state.domains = domainsRes.domains;
+        state.stats = domainsRes.stats;
         renderStats(state.stats);
         renderThemes();
         renderResults();

@@ -1,49 +1,10 @@
 const { openDb, initSchema } = require('../db/setup');
+const { checkDomain } = require('./porkbun');
 
-const RDAP_ENDPOINTS = {
-  com: 'https://rdap.verisign.com/com/v1',
-  ai: 'https://rdap.nic.ai',
-  io: 'https://rdap.identitydigital.services/rdap',
-  co: 'https://rdap.nic.co',
-};
-
-const REQUEST_TIMEOUT_MS = 10000;
-const DELAY_BETWEEN_REQUESTS_MS = 1000;
-const MAX_RETRIES_ON_429 = 3;
+const DELAY_BETWEEN_REQUESTS_MS = 500;
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
-}
-
-async function rdapLookup(domain) {
-  const tld = domain.split('.').pop().toLowerCase();
-  const base = RDAP_ENDPOINTS[tld];
-  if (!base) throw new Error(`No RDAP endpoint for .${tld}`);
-  const url = `${base}/domain/${encodeURIComponent(domain.toLowerCase())}`;
-
-  for (let attempt = 0; attempt <= MAX_RETRIES_ON_429; attempt += 1) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-    let res;
-    try {
-      res = await fetch(url, {
-        headers: { Accept: 'application/rdap+json' },
-        signal: controller.signal,
-      });
-    } finally {
-      clearTimeout(timer);
-    }
-
-    if (res.status === 404) return { available: true };
-    if (res.status === 200) return { available: false };
-    if (res.status === 429 && attempt < MAX_RETRIES_ON_429) {
-      const wait = 2000 * Math.pow(2, attempt);
-      await sleep(wait);
-      continue;
-    }
-    throw new Error(`RDAP ${tld} ${res.status}`);
-  }
-  throw new Error('rate limited');
 }
 
 async function checkAvailability({ limit = 25, recheck = false } = {}) {
@@ -51,22 +12,27 @@ async function checkAvailability({ limit = 25, recheck = false } = {}) {
   initSchema(db);
 
   const query = recheck
-    ? `SELECT id, domain FROM domains ORDER BY id LIMIT ?`
-    : `SELECT id, domain FROM domains WHERE availability_checked_at IS NULL ORDER BY id LIMIT ?`;
+    ? `SELECT id, domain FROM domains WHERE purchased_at IS NULL ORDER BY id LIMIT ?`
+    : `SELECT id, domain FROM domains
+         WHERE availability_checked_at IS NULL AND purchased_at IS NULL
+         ORDER BY id LIMIT ?`;
   const rows = db.prepare(query).all(limit);
 
   if (rows.length === 0) {
-    console.log('No domains to check.');
+    console.log('[availability] nothing to check');
     db.close();
     return { checked: 0, available: 0, taken: 0, errors: 0 };
   }
 
   const update = db.prepare(`
     UPDATE domains
-    SET available = @available,
-        availability_error = @error,
-        availability_checked_at = datetime('now')
-    WHERE id = @id
+       SET available = @available,
+           price_usd = @price_usd,
+           is_premium = @is_premium,
+           availability_source = 'porkbun',
+           availability_error = @error,
+           availability_checked_at = datetime('now')
+     WHERE id = @id
   `);
 
   let available = 0;
@@ -75,18 +41,30 @@ async function checkAvailability({ limit = 25, recheck = false } = {}) {
 
   for (const row of rows) {
     try {
-      const result = await rdapLookup(row.domain);
+      const r = await checkDomain(row.domain);
       update.run({
         id: row.id,
-        available: result.available ? 1 : 0,
+        available: r.available ? 1 : 0,
+        price_usd: r.price_usd,
+        is_premium: r.is_premium ? 1 : 0,
         error: null,
       });
-      if (result.available) available += 1;
+      if (r.available) available += 1;
       else taken += 1;
-      console.log(`${row.domain.padEnd(24)} ${result.available ? 'AVAILABLE' : 'taken'}`);
+      const price = r.price_usd != null ? `$${r.price_usd.toFixed(2)}` : 'n/a';
+      const tag = r.is_premium ? ' PREMIUM' : '';
+      console.log(
+        `${row.domain.padEnd(24)} ${r.available ? 'AVAILABLE' : 'taken'} ${price}${tag}`,
+      );
     } catch (err) {
       errors += 1;
-      update.run({ id: row.id, available: null, error: err.message });
+      update.run({
+        id: row.id,
+        available: null,
+        price_usd: null,
+        is_premium: null,
+        error: err.message,
+      });
       console.log(`${row.domain.padEnd(24)} error: ${err.message}`);
     }
     await sleep(DELAY_BETWEEN_REQUESTS_MS);
@@ -114,4 +92,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = { checkAvailability, rdapLookup };
+module.exports = { checkAvailability };

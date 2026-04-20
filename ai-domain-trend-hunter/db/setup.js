@@ -47,21 +47,28 @@ function initSchema(db) {
     CREATE INDEX IF NOT EXISTS idx_domains_theme ON domains(theme);
   `);
 
-  const existing = new Set(
+  const existingDomains = new Set(
     db.prepare(`PRAGMA table_info(domains)`).all().map((c) => c.name),
   );
-  const migrations = [
+  const domainMigrations = [
     ['available', 'INTEGER'],
     ['availability_error', 'TEXT'],
     ['availability_checked_at', 'TEXT'],
+    ['price_usd', 'REAL'],
+    ['is_premium', 'INTEGER'],
+    ['availability_source', 'TEXT'],
+    ['purchased_at', 'TEXT'],
+    ['listing_price_usd', 'REAL'],
+    ['landing_html', 'TEXT'],
   ];
-  for (const [col, type] of migrations) {
-    if (!existing.has(col)) {
+  for (const [col, type] of domainMigrations) {
+    if (!existingDomains.has(col)) {
       db.exec(`ALTER TABLE domains ADD COLUMN ${col} ${type}`);
     }
   }
 
   db.exec(`CREATE INDEX IF NOT EXISTS idx_domains_available ON domains(available)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_domains_purchased ON domains(purchased_at)`);
 }
 
 if (require.main === module) {
