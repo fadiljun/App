@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Riverside Dental Care — Refined Dentistry & Cosmetic Care</title>
+<meta name="description" content="Riverside Dental Care delivers calm, precise, and beautiful dentistry. Cosmetic, restorative, and preventive care in a serene, modern practice.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1f1c;
+  --bg-2:#0f2a26;
+  --cream:#f6f1e7;
+  --cream-2:#efe7d6;
+  --ink:#10221f;
+  --muted:#5d6b66;
+  --gold:#c9a24b;
+  --gold-soft:#e7d6a8;
+  --sage:#7fa295;
+  --line:rgba(16,34,31,.10);
+  --shadow:0 30px 60px -25px rgba(11,31,28,.35);
+  --radius:22px;
+  --maxw:1180px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  color:var(--ink);
+  background:var(--cream);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:500;line-height:1.08;letter-spacing:-.01em}
+.serif{font-family:'Fraunces',serif}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+.eyebrow{
+  font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold);font-weight:600;display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--gold);display:inline-block}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:15px 28px;border-radius:100px;font-weight:600;font-size:15px;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,background .35s,color .35s;
+  will-change:transform;
+}
+.btn-gold{background:var(--gold);color:#1c1407;box-shadow:0 14px 30px -12px rgba(201,162,75,.7)}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 22px 40px -14px rgba(201,162,75,.85)}
+.btn-ghost{border:1px solid rgba(246,241,231,.35);color:var(--cream)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold-soft);transform:translateY(-3px)}
+.btn-dark{background:var(--ink);color:var(--cream)}
+.btn-dark:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+
+/* ---------- NAV ---------- */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  transition:background .4s,backdrop-filter .4s,box-shadow .4s,padding .4s;
+  padding:22px 0;
+}
+header.scrolled{
+  background:rgba(246,241,231,.82);
+  backdrop-filter:saturate(160%) blur(14px);
+  box-shadow:0 1px 0 var(--line);
+  padding:14px 0;
+}
+.nav{display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:13px;color:var(--cream);transition:color .4s}
+header.scrolled .brand{color:var(--ink)}
+.brand .mark{
+  width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+  border:1.5px solid var(--gold);color:var(--gold);font-family:'Fraunces',serif;font-size:20px;
+  flex:none;
+}
+.brand b{font-family:'Fraunces',serif;font-size:19px;font-weight:600;letter-spacing:.01em;display:block;line-height:1}
+.brand span{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.7}
+.nav-links{display:flex;align-items:center;gap:34px}
+.nav-links a{font-size:14.5px;font-weight:500;color:var(--cream);opacity:.85;transition:color .4s,opacity .3s}
+header.scrolled .nav-links a{color:var(--ink)}
+.nav-links a:hover{opacity:1;color:var(--gold)}
+.nav .btn{padding:11px 22px;font-size:14px}
+.menu-toggle{display:none}
+
+/* ---------- HERO ---------- */
+.hero{
+  position:relative;min-height:100vh;display:flex;align-items:center;
+  background:
+    radial-gradient(120% 90% at 80% 10%, rgba(127,162,149,.25), transparent 60%),
+    linear-gradient(160deg,#0b1f1c 0%, #0f2a26 55%, #0a1a17 100%);
+  color:var(--cream);overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(60% 60% at 50% 120%, rgba(201,162,75,.18), transparent 70%);
+}
+.hero-grid{
+  display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center;
+  width:100%;padding-top:90px;
+}
+.hero h1{font-size:clamp(44px,6vw,82px);margin:22px 0 24px}
+.hero h1 em{font-style:italic;color:var(--gold-soft)}
+.hero p.lead{font-size:18px;max-width:480px;color:rgba(246,241,231,.78)}
+.hero-cta{display:flex;gap:16px;margin-top:36px;flex-wrap:wrap}
+.hero-stats{display:flex;gap:42px;margin-top:56px}
+.hero-stats .n{font-family:'Fraunces',serif;font-size:36px;color:var(--gold-soft);line-height:1}
+.hero-stats .l{font-size:12.5px;letter-spacing:.06em;color:rgba(246,241,231,.6);margin-top:6px}
+
+.hero-card{
+  position:relative;border-radius:28px;overflow:hidden;
+  aspect-ratio:4/5;box-shadow:0 50px 90px -30px rgba(0,0,0,.6);
+  background:linear-gradient(145deg,#16433a,#0c2521);
+  border:1px solid rgba(231,214,168,.18);
+}
+.hero-card .photo{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(80% 60% at 30% 20%, rgba(127,162,149,.55), transparent 60%),
+    radial-gradient(70% 70% at 80% 90%, rgba(201,162,75,.3), transparent 60%),
+    linear-gradient(160deg,#1c5347,#0c211d);
+}
+.hero-card .tooth{
+  position:absolute;inset:0;display:grid;place-items:center;font-size:170px;
+  color:rgba(246,241,231,.92);filter:drop-shadow(0 20px 40px rgba(0,0,0,.4));
+}
+.hero-card .badge{
+  position:absolute;left:22px;bottom:22px;right:22px;
+  background:rgba(11,31,28,.55);backdrop-filter:blur(8px);
+  border:1px solid rgba(231,214,168,.22);border-radius:16px;padding:16px 18px;
+  display:flex;align-items:center;gap:14px;
+}
+.hero-card .badge .ring{
+  width:44px;height:44px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:var(--gold);color:#1c1407;font-weight:700;font-family:'Fraunces',serif;
+}
+.hero-card .badge small{display:block;font-size:11.5px;letter-spacing:.08em;color:rgba(246,241,231,.65);text-transform:uppercase}
+.hero-card .badge b{font-family:'Fraunces',serif;font-weight:500;font-size:15px;color:var(--cream)}
+.scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:rgba(246,241,231,.5)}
+
+/* ---------- MARQUEE TRUST ---------- */
+.trust{background:var(--ink);color:rgba(246,241,231,.55);padding:20px 0;overflow:hidden}
+.trust .row{display:flex;gap:60px;white-space:nowrap;animation:slide 26s linear infinite;font-family:'Fraunces',serif;font-size:18px;font-style:italic}
+.trust .row span{opacity:.7}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* ---------- SECTION SHELL ---------- */
+section.block{padding:120px 0}
+.section-head{max-width:640px;margin-bottom:64px}
+.section-head h2{font-size:clamp(32px,4vw,52px);margin:18px 0 16px}
+.section-head p{color:var(--muted);font-size:17px}
+
+/* ---------- SERVICES ---------- */
+.services{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  padding:38px 32px;transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s,border-color .45s;
+  position:relative;overflow:hidden;
+}
+.card::before{
+  content:"";position:absolute;left:0;top:0;height:3px;width:0;background:var(--gold);transition:width .5s;
+}
+.card:hover{transform:translateY(-8px);box-shadow:var(--shadow);border-color:transparent}
+.card:hover::before{width:100%}
+.card .ic{
+  width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:26px;
+  background:linear-gradient(145deg,#0f2a26,#1c5347);color:var(--gold-soft);margin-bottom:24px;
+}
+.card h3{font-size:22px;margin-bottom:12px}
+.card p{color:var(--muted);font-size:15px}
+.card .more{margin-top:20px;font-size:13.5px;font-weight:600;color:var(--gold);letter-spacing:.02em}
+
+/* ---------- EXPERIENCE / SPLIT ---------- */
+.experience{background:var(--bg-2);color:var(--cream)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+.split .visual{
+  aspect-ratio:1/1;border-radius:26px;position:relative;overflow:hidden;
+  background:
+    radial-gradient(70% 70% at 30% 30%, rgba(127,162,149,.5), transparent 60%),
+    radial-gradient(60% 60% at 80% 80%, rgba(201,162,75,.35), transparent 55%),
+    linear-gradient(150deg,#16433a,#0a1a17);
+  border:1px solid rgba(231,214,168,.16);display:grid;place-items:center;
+}
+.split .visual .glyph{font-size:130px;filter:drop-shadow(0 16px 30px rgba(0,0,0,.4))}
+.experience .eyebrow{color:var(--gold-soft)}
+.experience h2{font-size:clamp(30px,3.6vw,46px);margin:18px 0 22px;color:var(--cream)}
+.experience p.body{color:rgba(246,241,231,.72);font-size:16.5px;max-width:480px}
+.feature-list{margin-top:34px;display:grid;gap:18px}
+.feature-list li{list-style:none;display:flex;gap:16px;align-items:flex-start}
+.feature-list .tick{
+  width:28px;height:28px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:rgba(201,162,75,.18);color:var(--gold-soft);font-size:13px;border:1px solid rgba(201,162,75,.4);
+}
+.feature-list b{font-family:'Fraunces',serif;font-weight:500;font-size:17px}
+.feature-list small{display:block;color:rgba(246,241,231,.6);font-size:14px;margin-top:2px}
+
+/* ---------- TESTIMONIAL ---------- */
+.quote{padding:130px 0;text-align:center}
+.quote .eyebrow{justify-content:center;display:inline-flex}
+.quote blockquote{
+  font-family:'Fraunces',serif;font-weight:400;font-size:clamp(26px,3.4vw,40px);
+  line-height:1.32;max-width:880px;margin:28px auto 32px;color:var(--ink);
+}
+.quote blockquote span{color:var(--gold)}
+.quote .who{font-weight:600;font-size:15px}
+.quote .who small{display:block;color:var(--muted);font-weight:400;letter-spacing:.04em}
+.stars{color:var(--gold);letter-spacing:4px;font-size:18px;margin-bottom:6px}
+
+/* ---------- CTA ---------- */
+.cta{
+  background:
+    radial-gradient(100% 120% at 100% 0%, rgba(127,162,149,.3), transparent 55%),
+    linear-gradient(150deg,#0b1f1c,#0f2a26);
+  color:var(--cream);border-radius:34px;padding:80px 60px;position:relative;overflow:hidden;
+  margin:0 28px;
+}
+.cta-inner{max-width:560px;position:relative;z-index:2}
+.cta h2{font-size:clamp(34px,4.4vw,56px);margin:18px 0 18px}
+.cta p{color:rgba(246,241,231,.75);font-size:17px;margin-bottom:34px}
+.cta .glow{position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,162,75,.4),transparent 65%);filter:blur(20px)}
+.cta-actions{display:flex;gap:16px;flex-wrap:wrap}
+
+/* ---------- FOOTER ---------- */
+footer{background:var(--ink);color:rgba(246,241,231,.6);padding:72px 0 36px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:50px}
+footer .brand{color:var(--cream);margin-bottom:18px}
+footer p.about{font-size:14.5px;max-width:280px;color:rgba(246,241,231,.55)}
+footer h4{font-family:'Inter',sans-serif;font-weight:600;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:18px}
+footer ul{list-style:none;display:grid;gap:11px}
+footer ul a{font-size:14.5px;color:rgba(246,241,231,.6);transition:color .3s}
+footer ul a:hover{color:var(--gold-soft)}
+.foot-bottom{border-top:1px solid rgba(246,241,231,.12);padding-top:26px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13px;color:rgba(246,241,231,.45)}
+
+/* ---------- REVEAL ANIMATION ---------- */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:980px){
+  .hero-grid{grid-template-columns:1fr;gap:48px}
+  .hero-card{max-width:420px}
+  .split{grid-template-columns:1fr;gap:44px}
+  .services{grid-template-columns:1fr 1fr}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:680px){
+  .nav-links{
+    position:fixed;inset:0 0 0 35%;background:var(--bg-2);flex-direction:column;
+    justify-content:center;gap:26px;transform:translateX(100%);transition:transform .4s;padding:30px;
+  }
+  .nav-links.open{transform:none}
+  .nav-links a{color:var(--cream)!important;font-size:18px}
+  .menu-toggle{display:inline-flex;flex-direction:column;gap:5px;background:none;border:0;cursor:pointer;z-index:60}
+  .menu-toggle span{width:26px;height:2px;background:var(--cream);transition:background .4s}
+  header.scrolled .menu-toggle span{background:var(--ink)}
+  .services{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr}
+  .hero-stats{flex-wrap:wrap;gap:28px}
+  .cta{padding:56px 30px}
+  section.block{padding:84px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header id="hdr">
+  <div class="wrap nav">
+    <a class="brand" href="#top">
+      <span class="mark">R</span>
+      <span><b>Riverside</b><span>Dental Care</span></span>
+    </a>
+    <nav class="nav-links" id="navlinks">
+      <a href="#services">Services</a>
+      <a href="#experience">The Experience</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact" class="btn btn-gold">Book a Visit</a>
+    </nav>
+    <button class="menu-toggle" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="reveal in">
+      <span class="eyebrow">Refined dentistry · Est. 1998</span>
+      <h1>A calmer way to a <em>brilliant</em> smile.</h1>
+      <p class="lead">Riverside Dental Care blends meticulous clinical craft with a serene, spa-like experience — so every visit feels less like an appointment and more like a reset.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-gold">Reserve your consultation →</a>
+        <a href="#services" class="btn btn-ghost">Explore treatments</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="n">25+</div><div class="l">Years of care</div></div>
+        <div><div class="n">14k</div><div class="l">Smiles restored</div></div>
+        <div><div class="n">4.9★</div><div class="l">Patient rating</div></div>
+      </div>
+    </div>
+    <div class="reveal in" style="transition-delay:.15s">
+      <div class="hero-card">
+        <div class="photo"></div>
+        <div class="tooth">🦷</div>
+        <div class="badge">
+          <div class="ring">✓</div>
+          <div>
+            <small>Same-week appointments</small>
+            <b>Gentle, sedation-friendly care</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- ============ TRUST MARQUEE ============ -->
+<div class="trust">
+  <div class="row">
+    <span>Invisalign Diamond Provider</span><span>·</span>
+    <span>ADA Accredited</span><span>·</span>
+    <span>Digital 3D Imaging</span><span>·</span>
+    <span>Award-Winning Cosmetic Team</span><span>·</span>
+    <span>Sedation Dentistry</span><span>·</span>
+    <span>Invisalign Diamond Provider</span><span>·</span>
+    <span>ADA Accredited</span><span>·</span>
+    <span>Digital 3D Imaging</span><span>·</span>
+    <span>Award-Winning Cosmetic Team</span><span>·</span>
+    <span>Sedation Dentistry</span><span>·</span>
+  </div>
+</div>
+
+<!-- ============ SERVICES ============ -->
+<section class="block" id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">What we do</span>
+      <h2>Care designed around how you actually feel.</h2>
+      <p>From the everyday to the transformative, each treatment is delivered with precision instruments, transparent pricing, and a team that never rushes.</p>
+    </div>
+    <div class="services">
+      <div class="card reveal">
+        <div class="ic">🪥</div>
+        <h3>Preventive Care</h3>
+        <p>Comfortable cleanings, digital check-ups, and personalised hygiene plans that keep problems from ever starting.</p>
+        <div class="more">Learn more →</div>
+      </div>
+      <div class="card reveal" style="transition-delay:.08s">
+        <div class="ic">✨</div>
+        <h3>Cosmetic Dentistry</h3>
+        <p>Whitening, veneers, and full smile design — natural-looking results shaped to your features, not a template.</p>
+        <div class="more">Learn more →</div>
+      </div>
+      <div class="card reveal" style="transition-delay:.16s">
+        <div class="ic">😬</div>
+        <h3>Invisalign &amp; Aligners</h3>
+        <p>Discreet, clinically-mapped tooth alignment with 3D previews so you see the result before you begin.</p>
+        <div class="more">Learn more →</div>
+      </div>
+      <div class="card reveal">
+        <div class="ic">🛡️</div>
+        <h3>Restorative Work</h3>
+        <p>Crowns, bridges, and implants crafted in tooth-matched ceramic for a repair that disappears into your smile.</p>
+        <div class="more">Learn more →</div>
+      </div>
+      <div class="card reveal" style="transition-delay:.08s">
+        <div class="ic">💤</div>
+        <h3>Sedation &amp; Comfort</h3>
+        <p>Anxious about the dentist? Our sedation options and calm environment make even longer treatments feel effortless.</p>
+        <div class="more">Learn more →</div>
+      </div>
+      <div class="card reveal" style="transition-delay:.16s">
+        <div class="ic">🚑</div>
+        <h3>Emergency Care</h3>
+        <p>Pain doesn't keep a schedule. Same-day emergency slots are reserved daily for our patients.</p>
+        <div class="more">Learn more →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXPERIENCE ============ -->
+<section class="block experience" id="experience">
+  <div class="wrap split">
+    <div class="visual reveal"><div class="glyph">🦷</div></div>
+    <div class="reveal" style="transition-delay:.1s">
+      <span class="eyebrow">The experience</span>
+      <h2>Designed to feel nothing like a dental office.</h2>
+      <p class="body">Warm lighting, noise-cancelling headphones, weighted blankets, and a team that explains every step. We rebuilt the visit from the patient's chair outward.</p>
+      <ul class="feature-list">
+        <li><span class="tick">✓</span><div><b>No-wait scheduling</b><small>Real appointment times — we respect yours.</small></div></li>
+        <li><span class="tick">✓</span><div><b>Transparent, upfront pricing</b><small>You approve every cost before we begin.</small></div></li>
+        <li><span class="tick">✓</span><div><b>Single-visit technology</b><small>Same-day crowns and digital impressions — no goop.</small></div></li>
+        <li><span class="tick">✓</span><div><b>Flexible financing</b><small>Interest-free plans on most cosmetic treatments.</small></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIAL ============ -->
+<section class="quote" id="reviews">
+  <div class="wrap reveal">
+    <div class="stars">★★★★★</div>
+    <span class="eyebrow">Patient stories</span>
+    <blockquote>"I used to dread the dentist. Riverside changed that completely — <span>I actually look forward to my visits now.</span> The team is gentle, the office is gorgeous, and my smile has never looked better."</blockquote>
+    <div class="who">Marisa Halloran<small>Patient since 2019 · Riverside, CA</small></div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="block" style="padding-top:0" id="contact">
+  <div class="cta reveal">
+    <div class="glow"></div>
+    <div class="cta-inner">
+      <span class="eyebrow">Begin today</span>
+      <h2>Your best smile starts with one visit.</h2>
+      <p>Book a complimentary consultation. We'll review your goals, show you what's possible, and build a plan with zero pressure.</p>
+      <div class="cta-actions">
+        <a href="tel:+15558675309" class="btn btn-gold">Call (555) 867-5309</a>
+        <a href="mailto:hello@riversidedental.com" class="btn btn-ghost">Request a callback</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="#top">
+          <span class="mark">R</span>
+          <span><b>Riverside</b><span>Dental Care</span></span>
+        </a>
+        <p class="about">Refined, gentle dentistry serving the Riverside community since 1998. Cosmetic, restorative, and preventive care under one calm roof.</p>
+      </div>
+      <div>
+        <h4>Treatments</h4>
+        <ul>
+          <li><a href="#services">Preventive Care</a></li>
+          <li><a href="#services">Cosmetic Dentistry</a></li>
+          <li><a href="#services">Invisalign</a></li>
+          <li><a href="#services">Implants</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Practice</h4>
+        <ul>
+          <li><a href="#experience">The Experience</a></li>
+          <li><a href="#reviews">Reviews</a></li>
+          <li><a href="#contact">Book a Visit</a></li>
+          <li><a href="#top">Our Team</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Visit Us</h4>
+        <ul>
+          <li>123 Maple Street</li>
+          <li>Riverside, CA 92501</li>
+          <li><a href="tel:+15558675309">(555) 867-5309</a></li>
+          <li>Mon–Fri · 8am–5pm</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 1998–2026 Riverside Dental Care. All rights reserved.</span>
+      <span>Privacy · Terms · Accessibility</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Sticky header
+const hdr=document.getElementById('hdr');
+const onScroll=()=>hdr.classList.toggle('scrolled',window.scrollY>40);
+onScroll();window.addEventListener('scroll',onScroll,{passive:true});
+
+// Mobile menu
+const btn=document.getElementById('menuBtn'),links=document.getElementById('navlinks');
+btn.addEventListener('click',()=>links.classList.toggle('open'));
+links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>links.classList.remove('open')));
+
+// Scroll reveal
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+},{threshold:.14});
+document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
